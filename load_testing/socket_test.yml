@@ -1,0 +1,19 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 5
+      arrivalRate: 20
+  processor: "./functions.js"
+
+scenarios:
+  - name: "User connects with random device list"
+    weight: 100
+    engine: "socketio"
+    flow:
+    - get:
+        url: "/"
+    - loop:
+      - function: "setDeviceList"
+      - emit:
+          channel: "init_devices"
+          data: "{{ deviceList }}"
